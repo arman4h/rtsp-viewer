@@ -1,0 +1,15 @@
+.vscode
+.venv
+
+# Runtime / generated files
+mediamtx
+mediamtx.log
+mediamtx.default.yml
+
+# Transfer/build artifacts
+*.tar.gz
+*.zip
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

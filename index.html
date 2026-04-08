@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RTSP Viewer</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="scanline"></div>
+  <div class="noise"></div>
+
+  <header>
+    <div class="logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">RTSP<span class="accent">VIEWER</span></span>
+    </div>
+    <div class="header-right">
+      <span class="version">v1.0.0</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- LEFT: Controls -->
+    <aside class="sidebar">
+
+      <section class="card" id="connectCard">
+        <div class="card-title">
+          <span class="card-icon">◈</span> CONNECTION
+        </div>
+
+        <div class="field">
+          <label>CAMERA IP</label>
+          <input id="ip" type="text" placeholder="192.168.1.100" value="192.168.1.103" autocomplete="off">
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>PORT (OPTIONAL)</label>
+            <input id="port" type="text" placeholder="leave blank" value="">
+          </div>
+          <div class="field">
+            <label>STREAM PATH</label>
+            <input id="path" type="text" placeholder="stream0" value="stream=0">
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>USERNAME</label>
+            <input id="user" type="text" placeholder="admin" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>PASSWORD</label>
+            <input id="pass" type="password" placeholder="••••••" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>MEDIAMTX HOST</label>
+          <input id="mtxhost" type="text" placeholder="localhost" value="localhost">
+        </div>
+
+        <button class="btn-connect" id="btnConnect" onclick="connect()">
+          <span class="btn-icon">▶</span> CONNECT
+        </button>
+        <button class="btn-disconnect" id="btnDisconnect" onclick="disconnect()">
+          <span class="btn-icon">■</span> DISCONNECT
+        </button>
+
+        <div id="status" class="status">Ready to connect</div>
+      </section>
+
+      <!-- Camera List -->
+      <section class="card" id="cameraCard">
+        <div class="card-title">
+          <span class="card-icon">◈</span> SAVED CAMERAS
+          <button class="btn-small" onclick="saveCamera()">+ SAVE</button>
+        </div>
+        <div id="cameraList" class="camera-list">
+          <div class="empty-list">No saved cameras yet</div>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="card stats-card" id="statsCard">
+        <div class="card-title"><span class="card-icon">◈</span> SESSION</div>
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="stat-value" id="statTime">--:--</div>
+            <div class="stat-label">DURATION</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" id="statState">IDLE</div>
+            <div class="stat-label">STATE</div>
+          </div>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- RIGHT: Video -->
+    <div class="viewer">
+
+      <!-- Main Feed -->
+      <div class="video-wrapper" id="videoWrapper">
+        <div class="idle-screen" id="idleScreen">
+          <div class="idle-icon">⬡</div>
+          <div class="idle-text">NO SIGNAL</div>
+          <div class="idle-sub">Connect to a camera to start viewing</div>
+        </div>
+
+        <video id="feed" autoplay playsinline muted controls disablePictureInPicture></video>
+
+        <div class="overlay-play" id="overlayPlay" onclick="forcePlay()">
+          <span>▶</span>
+        </div>
+
+        <!-- Video Controls Bar -->
+        <div class="video-controls" id="videoControls">
+          <div class="vc-left">
+            <span class="live-dot"></span>
+            <span class="live-label">LIVE</span>
+            <span class="vc-url" id="vcUrl"></span>
+          </div>
+          <div class="vc-right">
+            <button class="vc-btn" onclick="takeScreenshot()" title="Screenshot">⊡</button>
+            <button class="vc-btn" onclick="toggleFullscreen()" title="Fullscreen">⤢</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multi Camera Grid -->
+      <div class="multicam-bar">
+        <div class="multicam-title">
+          <span>◈ MULTI-CAM</span>
+          <button class="btn-small" onclick="addCamSlot()">+ ADD</button>
+        </div>
+        <div class="multicam-grid" id="multicamGrid">
+          <!-- slots added dynamically -->
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Screenshot Preview Modal -->
+  <div class="modal" id="screenshotModal" onclick="closeModal()">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+      <div class="modal-title">SCREENSHOT CAPTURED</div>
+      <img id="screenshotImg" src="" alt="screenshot">
+      <div class="modal-actions">
+        <a id="screenshotDownload" download="rtsp-screenshot.png">
+          <button class="btn-connect" style="width:auto;padding:10px 24px;">⬇ DOWNLOAD</button>
+        </a>
+        <button class="btn-disconnect" style="width:auto;padding:10px 24px;" onclick="closeModal()">✕ CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
